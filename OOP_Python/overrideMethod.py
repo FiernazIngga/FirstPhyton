@@ -14,6 +14,7 @@ class HeroIntel(Hero):
     def __init__(self, name, health = 100):
         super().__init__(name, health)
     
+    # Override
     def showInfo(self):
         print("Show info di class HeroIntelligent")
         print("{} \n\tTipe: Intelligent, \n\tHealth: {}".format(self.name, self.health))
