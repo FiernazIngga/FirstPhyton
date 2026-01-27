@@ -1,23 +1,27 @@
 # inputLog.py
 from pynput import keyboard, mouse
-from state import keyboardAktif, mouseAktif, scrollAktif
 
-def mulai_melihat_input_user():
-    """
-    Fungsi ini menjalankan listener untuk keyboard dan mouse.
-    Listener akan memanggil fungsi keyboardAktif atau mouseAktif
-    saat user melakukan aktivitas.
-    """
+class InputListener:
+    def __init__(self, state):
+        self.state = state
 
-    # Listener keyboard: setiap tombol ditekan, set state typing = True
-    keyboard_listener = keyboard.Listener(
-        on_press=lambda key: keyboardAktif(key)
-    )
-    keyboard_listener.start()  # jalankan listener di background
+    def start(self):
+        keyboard_listener = keyboard.Listener(
+            on_press=self.on_key_press
+        )
+        keyboard_listener.start()
 
-    # Listener mouse: setiap mouse digerakkan, set state mouse_move = True dan update posisi
-    mouse_listener = mouse.Listener(
-        on_move=lambda x, y: mouseAktif(x, y),
-        on_scroll=lambda x, y, dx, dy:scrollAktif(dx, dy)
-    )
-    mouse_listener.start()  # jalankan listener di background
+        mouse_listener = mouse.Listener(
+            on_move=self.on_mouse_move,
+            on_scroll=self.on_scroll
+        )
+        mouse_listener.start()
+
+    def on_key_press(self, key):
+        self.state.keyboard_aktif(key)
+
+    def on_mouse_move(self, x, y):
+        self.state.mouse_aktif(x, y)
+
+    def on_scroll(self, x, y, dx, dy):
+        self.state.scroll_aktif(dx, dy)

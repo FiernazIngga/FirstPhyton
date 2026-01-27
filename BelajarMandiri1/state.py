@@ -1,20 +1,29 @@
-state = {
-    "typing": False,
-    "key": None,
-    "mouse_move": False,
-    "mouse_pos": (0, 0),
-    "scroll": (0, 0),
-    "scrollAktif": False
-}
+# state.py
 
-def keyboardAktif(key):
-    state["typing"] = True,
-    state["key"] = key
+class InputState:
+    def __init__(self):
+        self.typing = False
+        self.key = None
 
-def scrollAktif(x, y):
-    state["scrollAktif"] = True,
-    state["scroll"] = (x, y)
+        self.mouse_move = False
+        self.mouse_pos = (0, 0)
 
-def mouseAktif(x, y):
-    state["mouse_move"] = True
-    state["mouse_pos"] = (x, y)
+        self.scrollAktif = False
+        self.scroll = (0, 0)
+
+    def keyboard_aktif(self, key):
+        self.typing = True
+        self.key = key
+
+    def mouse_aktif(self, x, y):
+        self.mouse_move = True
+        self.mouse_pos = (x, y)
+
+    def scroll_aktif(self, dx, dy):
+        self.scrollAktif = True
+        self.scroll = (dx, dy)
+
+    def reset(self):
+        self.typing = False
+        self.mouse_move = False
+        self.scrollAktif = False

@@ -1,53 +1,41 @@
+# main.py
 import time
 import os
 os.system("cls")
 
-from state import state
-from inputLog import mulai_melihat_input_user
+from state import InputState
+from inputLog import InputListener
 
-def main_loop():
-    # while True:
-    #     time.sleep(0.1)
+class Application:
+    def __init__(self):
+        self.state = InputState()
+        self.listener = InputListener(self.state)
 
-    #     # Tentukan status
-    #     if state["typing"] and state["mouse_move"]:
-    #         status = f"ngetik + gerakin mouse {state['mouse_pos']}"
-    #     elif state["typing"]:
-    #         status = "ngetik"
-    #     elif state["mouse_move"]:
-    #         status = f"gerakin mouse {state['mouse_pos']}"
-    #     else:
-    #         status = "diem"
+    def run(self):
+        print("Running...")
+        self.listener.start()
 
-    #     print(f"\rStatus: {status}    ")
+        try:
+            while True:
+                time.sleep(0.01)
 
-    #     # Reset state tiap loop, kecuali posisi mouse
-    #     state["typing"] = False
-    #     state["mouse_move"] = False
+                if self.state.typing:
+                    print(f"Hai ngetik {self.state.key}")
 
-    try:
-        while True:
-            time.sleep(0.01) # Delat 1 detik tiap loop
+                if self.state.mouse_move:
+                    x, y = self.state.mouse_pos
+                    print(f"Posisi mouse: ({x}, {y})")
 
-            if state['typing']:
-                print(f"Hai ngetik {state['key']}")
-            
-            if state['mouse_move']:
-                x,y = state['mouse_pos']
-                print(f"Posisi mouse: ({x}, {y})")
+                if self.state.scrollAktif:
+                    dx, dy = self.state.scroll
+                    print(f"Scroll: ({dx}, {dy})")
 
-            if state['scrollAktif']:
-                x,y = state['scroll']
-                print(f"Posisi scroll: ({x}, {y})")
+                self.state.reset()
 
-            state["typing"] = False
-            state["mouse_move"] = False
-            state["scrollAktif"] = False
-            
-    except KeyboardInterrupt:
-        print("Program diberhentikan")
+        except KeyboardInterrupt:
+            print("Program diberhentikan")
+
 
 if __name__ == "__main__":
-    print("Running...")
-    mulai_melihat_input_user()
-    main_loop()
+    app = Application()
+    app.run()
